@@ -1,4 +1,4 @@
-package com.sameershelar.toodo.presentation.components
+package com.sameershelar.toodo.presentation.homescreen.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +17,7 @@ fun AppBar(
         Text(
             text = "Toodo",
             style = MaterialTheme.typography.titleLarge,
-            fontSize = 38.sp,
+            fontSize = 40.sp,
             color = MaterialTheme.colorScheme.primary
         )
     }
