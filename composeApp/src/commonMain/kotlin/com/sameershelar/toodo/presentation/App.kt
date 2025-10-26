@@ -25,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview(
     showBackground = true,
 )
-fun App() {
+fun App()
     ToodoAppTheme {
         Scaffold(
             topBar = {
