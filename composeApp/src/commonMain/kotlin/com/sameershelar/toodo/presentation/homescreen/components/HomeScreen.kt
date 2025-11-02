@@ -79,10 +79,9 @@ fun HomeScreen(
                     hostState = snackbarHostState
                 )
             }
-        ) { innerPadding ->
+        ) {
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
             ) {
                 AppBar(
                     modifier = Modifier
