@@ -19,8 +19,8 @@ class ToodoKtorRemoteApi(
 ) : ToodoRemoteApi {
 
     val token =
-        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OGUxMzI4OWNkNDk0YjJjYmFlMTFjOTYiLCJ0eXBlIjoiYWNjZXNz" +
-                "IiwiaWF0IjoxNzYyMDk5OTE0LCJleHAiOjE3NjIxMDA4MTR9.SQQWybWR1Mm1b2nW8LBZseQsVN14yErLqD-kSyOKUQI"
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OGUxMzI4OWNkNDk0YjJjYmFlMTFjOTYiLCJ0eXBlIjoiYWNjZXNzIi" +
+                "wiaWF0IjoxNzYyMDk1MzU4LCJleHAiOjE3NjIwOTYyNTh9.Yaqd1ZF-ExkDKaeCu42VLchLf0gWLA8uVn33CWrZTWc"
 
     override suspend fun fetchAllToodos(): List<Toodo> {
         val response = client.get("/toodos") {
