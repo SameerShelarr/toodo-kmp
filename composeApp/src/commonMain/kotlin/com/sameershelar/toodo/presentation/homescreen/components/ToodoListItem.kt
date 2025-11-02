@@ -19,6 +19,8 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,13 +40,23 @@ fun ToodoListItem(
     onCheckChanged: (Toodo) -> Unit = {},
     onDelete: (Toodo) -> Unit = {}
 ) {
-    @Suppress("DEPRECATION") val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
+
+    /**
+     * This is needed because when parameters or values computed during composition are
+     * referenced by a long-lived lambda or object expression they should not reference the old value
+     * but the latest value which is the case for confirmValueChange when this is used.
+     */
+    val latestToodo by rememberUpdatedState(toodo)
+
+    @Suppress("DEPRECATION")
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
             if (it == SwipeToDismissBoxValue.EndToStart || it == SwipeToDismissBoxValue.StartToEnd) {
-                onDelete.invoke(toodo)
+                onDelete.invoke(latestToodo)
             }
-            return@rememberSwipeToDismissBoxState false
-        })
+            false
+        }
+    )
 
     SwipeToDismissBox(
         state = swipeToDismissBoxState, modifier = modifier.fillMaxSize(), backgroundContent = {
