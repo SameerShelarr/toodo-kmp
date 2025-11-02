@@ -7,6 +7,13 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+
+    // Room Database
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
+
+    // Kotlinx Serialization
+    kotlin(libs.plugins.serialization.kotlin.get().pluginId) version libs.versions.kotlin.get()
 }
 
 kotlin {
@@ -32,6 +39,13 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Koin
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
+            // Ktor
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -42,6 +56,35 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Material3 Expressive
+            implementation(libs.material3.expressive)
+
+            // Koin
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            // ViewModel
+            implementation(libs.lifecycle.viewmodel)
+
+            // DataStore library
+            api(libs.androidx.datastore)
+            api(libs.androidx.datastore.preferences)
+
+            // Room Database
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
+
+            // Ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.logging)
+        }
+        iosMain.dependencies {
+            // Ktor
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -49,8 +92,17 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+
+            // Ktor
+            implementation(libs.ktor.client.android)
         }
     }
+
+    // To suppress the following warning:
+    //'expect'/'actual' classes (including interfaces, objects, annotations, enums, and 'actual' typealiases)
+    // are in Beta. Consider using the '-Xexpect-actual-classes' flag to suppress this warning.
+    // Also see: https://youtrack.jetbrains.com/issue/KT-61573
+    compilerOptions.freeCompilerArgs.add("-Xexpect-actual-classes")
 }
 
 android {
@@ -82,6 +134,17 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+
+    // Room Database
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspJvm", libs.androidx.room.compiler)
+}
+
+// Room database settings
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 compose.desktop {
