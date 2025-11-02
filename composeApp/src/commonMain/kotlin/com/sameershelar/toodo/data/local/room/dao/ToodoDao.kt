@@ -21,6 +21,6 @@ interface ToodoDao {
     @Delete
     suspend fun deleteToodo(toodo: Toodo)
 
-    @Query("SELECT * FROM toodo")
+    @Query("SELECT * FROM toodo WHERE isDeleted = 0 ORDER BY isCompleted ASC, createdAt DESC")
     fun getAllToodos(): Flow<List<Toodo>>
 }

@@ -19,7 +19,7 @@ interface ToodoRemoteApi {
     /**
      * Update an existing Toodo in the remote server.
      */
-    suspend fun updateToodo(toodo: Toodo)
+    suspend fun updateToodo(toodo: Toodo): Toodo
 
     /**
      * Delete a Toodo from the remote server.

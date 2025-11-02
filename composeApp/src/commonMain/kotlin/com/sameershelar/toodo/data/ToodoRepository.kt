@@ -5,24 +5,16 @@ import com.sameershelar.toodo.domain.data.local.ToodoLocalDatabase
 import com.sameershelar.toodo.domain.data.local.ToodoLocalKeyValueStorage
 import com.sameershelar.toodo.domain.data.remote.ToodoRemoteApi
 import com.sameershelar.toodo.domain.models.Toodo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ToodoRepository(
     private val localKeyValueStorage: ToodoLocalKeyValueStorage,
     private val localDatabase: ToodoLocalDatabase,
     private val remoteApi: ToodoRemoteApi,
 ) : ToodoRepository {
-    override suspend fun fetchAndSaveAllToodos() = withContext(Dispatchers.IO) {
-        val todos = remoteApi.fetchAllToodos()
-        todos.forEach { toodo ->
-            launch {
-                localDatabase.addToodo(toodo)
-            }
-        }
+    override suspend fun fetchAndSaveAllToodos() {
+        val toodos = remoteApi.fetchAllToodos()
+        localDatabase.cacheToodos(toodos)
     }
 
     override fun getAllToodos(): Flow<List<Toodo>> {
@@ -35,10 +27,20 @@ class ToodoRepository(
 
     override suspend fun updateToodo(toodo: Toodo) {
         localDatabase.updateToodo(toodo)
+        remoteApi.updateToodo(toodo)
+        localDatabase.synced(toodo)
     }
 
     override suspend fun deleteToodo(toodo: Toodo) {
         localDatabase.deleteToodo(toodo)
+    }
+
+    override suspend fun softDeleteToodo(toodo: Toodo) {
+        localDatabase.softDeleteToodo(toodo)
+    }
+
+    override suspend fun softRestoreToodo(toodo: Toodo) {
+        localDatabase.softRestoreToodo(toodo)
     }
 
     override suspend fun saveAccessToken(token: String) {

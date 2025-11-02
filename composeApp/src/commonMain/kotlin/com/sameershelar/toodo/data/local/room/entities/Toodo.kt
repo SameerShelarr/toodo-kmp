@@ -11,6 +11,8 @@ data class Toodo(
     val isCompleted: Boolean,
     val createdAt: String,
     val color: String,
+    val isDeleted: Boolean = false,
+    val isSynced: Boolean = false,
 )
 
 fun Toodo.toDomain() = com.sameershelar.toodo.domain.models.Toodo(
@@ -21,10 +23,15 @@ fun Toodo.toDomain() = com.sameershelar.toodo.domain.models.Toodo(
     color = color,
 )
 
-fun com.sameershelar.toodo.domain.models.Toodo.toEntity() = Toodo(
+fun com.sameershelar.toodo.domain.models.Toodo.toEntity(
+    isSynced: Boolean = false,
+    isDeleted: Boolean = false,
+) = Toodo(
     id = id,
     title = title,
     isCompleted = isCompleted,
     createdAt = createdAt,
     color = color,
+    isDeleted = isDeleted,
+    isSynced = isSynced,
 )

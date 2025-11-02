@@ -1,6 +1,7 @@
 package com.sameershelar.toodo.data.remote.ktor
 
 import com.sameershelar.toodo.data.remote.dto.ToodoDTO
+import com.sameershelar.toodo.data.remote.dto.toDTO
 import com.sameershelar.toodo.data.remote.dto.toDomainModel
 import com.sameershelar.toodo.domain.data.remote.ToodoRemoteApi
 import com.sameershelar.toodo.domain.models.TokenPair
@@ -10,27 +11,32 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
 class ToodoKtorRemoteApi(
     private val client: HttpClient,
 ) : ToodoRemoteApi {
+
+    val token =
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OGUxMzI4OWNkNDk0YjJjYmFlMTFjOTYiLCJ0eXBlIjoiYWNjZXNzIi" +
+                "wiaWF0IjoxNzYyMDk1MzU4LCJleHAiOjE3NjIwOTYyNTh9.Yaqd1ZF-ExkDKaeCu42VLchLf0gWLA8uVn33CWrZTWc"
+
     override suspend fun fetchAllToodos(): List<Toodo> {
-        val response = client.get("/todos") {
+        val response = client.get("/toodos") {
             header(
                 key = "Authorization",
-                value = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2OGUxMzI4OWNkNDk0YjJjYmFlMTFjOTY" +
-                        "iLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzYxNDcwMDk4LCJleHAiOjE3NjE0NzA5OTh9" +
-                        ".48qa5xJ2sBdMw2uyfVUWeUFj0wIES8mJ5PmxPlphLgM"
+                value = "Bearer $token"
             )
         }
-        when (response.status.value) {
+        return when (response.status.value) {
             in 200..299 -> {
                 val toodos: List<ToodoDTO> = response.body<List<ToodoDTO>>()
-                return toodos.map { it.toDomainModel() }
+                toodos.map { it.toDomainModel() }
             }
 
             else -> {
-                return emptyList()
+                emptyList()
             }
         }
     }
@@ -39,8 +45,30 @@ class ToodoKtorRemoteApi(
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateToodo(toodo: Toodo) {
-        TODO("Not yet implemented")
+    override suspend fun updateToodo(toodo: Toodo): Toodo {
+        val response = client.post("/toodos") {
+            header(
+                key = "Authorization",
+                value = "Bearer $token"
+            )
+            header(
+                key = "Content-Type",
+                value = "application/json"
+            )
+            setBody(
+                toodo.toDTO()
+            )
+        }
+        when (response.status.value) {
+            in 200..299 -> {
+                return response.body<ToodoDTO>()
+                    .toDomainModel()
+            }
+
+            else -> {
+                throw Exception("Failed to update toodo")
+            }
+        }
     }
 
     override suspend fun deleteToodo(toodoId: String) {
@@ -64,5 +92,4 @@ class ToodoKtorRemoteApi(
     override suspend fun refreshToken(): TokenPair {
         TODO("Not yet implemented")
     }
-
 }

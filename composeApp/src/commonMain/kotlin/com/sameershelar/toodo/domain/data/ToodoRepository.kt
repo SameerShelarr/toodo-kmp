@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ToodoRepository {
 
     /**
-     * Fetch all Toodos from the remote server.
+     * Fetch all Toodos from the remote server and save them to the local database.
      */
     suspend fun fetchAndSaveAllToodos()
 
@@ -16,19 +16,29 @@ interface ToodoRepository {
     fun getAllToodos(): Flow<List<Toodo>>
 
     /**
-     * Add a new Toodo to the local database.
+     * Add a new Toodo to the remote & local database.
      */
     suspend fun addToodo(toodo: Toodo)
 
     /**
-     * Update an existing Toodo in the local database.
+     * Update an existing Toodo in the remote & local database.
      */
     suspend fun updateToodo(toodo: Toodo)
 
     /**
-     * Delete a Toodo from the local database.
+     * Delete a Toodo from the remote & local database.
      */
     suspend fun deleteToodo(toodo: Toodo)
+
+    /**
+     * Soft delete a Toodo from the local database.
+     */
+    suspend fun softDeleteToodo(toodo: Toodo)
+
+    /**
+     * Soft restore a Toodo from the local database.
+     */
+    suspend fun softRestoreToodo(toodo: Toodo)
 
     /**
      * Save the access token in local storage.

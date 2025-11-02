@@ -83,6 +83,14 @@ val composePreviewModule = module {
             override suspend fun deleteToodo(toodo: Toodo) { /* no-op */
             }
 
+            override suspend fun softDeleteToodo(toodo: Toodo) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun softRestoreToodo(toodo: Toodo) {
+                TODO("Not yet implemented")
+            }
+
             override suspend fun saveAccessToken(token: String) { /* no-op */
             }
 

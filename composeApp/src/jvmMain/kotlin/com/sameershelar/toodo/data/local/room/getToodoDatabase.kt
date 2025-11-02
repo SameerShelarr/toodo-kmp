@@ -7,6 +7,7 @@ import java.io.File
 
 fun getToodoDatabase(): ToodoDatabase {
     val dbFile = File(System.getProperty("java.io.tmpdir"), "toodo.db")
+    println("Database path: ${dbFile.absolutePath}")
     return Room.databaseBuilder<ToodoDatabase>(
         name = dbFile.absolutePath,
     )
