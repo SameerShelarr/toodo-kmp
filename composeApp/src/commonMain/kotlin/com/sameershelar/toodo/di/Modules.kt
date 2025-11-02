@@ -62,14 +62,14 @@ val composePreviewModule = module {
                         title = "Sample Toodo 1",
                         isCompleted = false,
                         createdAt = "",
-                        color = ""
+                        color = "FF00FFFF"
                     ),
                     Toodo(
                         id = "2",
                         title = "Sample Toodo 2",
                         isCompleted = false,
                         createdAt = "",
-                        color = ""
+                        color = "FFFFFF00"
                     ),
                 )
             )
